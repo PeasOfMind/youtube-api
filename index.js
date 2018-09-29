@@ -36,7 +36,7 @@ function renderNavButtons(data){
     let prevPageString = '';
     if (data.nextPageToken) nextPageString = `<li id="${data.nextPageToken}">Next >></li>`
     if (data.prevPageToken) prevPageString = `<li id="${data.prevPageToken}"><< Previous</li>`    
-    return `<ul class="js-navigation">
+    return `<ul>
     ${prevPageString}
     ${nextPageString}
     </ul>`
@@ -49,14 +49,13 @@ function displayYoutubeSearch(data){
     let results = data.items.map(item => renderResults(item));
     //get the nextPage and previousPage tokens
     let navString = renderNavButtons(data);
-    let fullResults = `${results.join('')}
-    ${navString}`;
     //put it into HTML
-    $('.js-search-results').html(fullResults);
+    $('.js-search-results').html(results);
+    $('.js-navigation').html(navString);
 }
 
 function displaySearchTitle(searchString){
-    searchTitleString = `<h2>Search Results for: ${searchString}</h2>`
+    searchTitleString = `<h2>Search Results for: <span>${searchString}</span></h2>`
     $('.js-search-title').html(searchTitleString);
 }
 
@@ -72,12 +71,12 @@ function watchSubmit(){
 }
 
 function watchNavigation(){
-    $('.js-search-results').click(function(event){
-        console.log(this);
-        let idToken = $(this).children('li');
+    $('.js-navigation').on('click', 'li', function(event){
+        let idToken = $(this).attr('id');
         console.log(idToken);
+        let existingQuery = $('.js-search-title').find('span').text();
+        getDataFromAPI(existingQuery, displayYoutubeSearch, idToken);
     });
-    // getDataFromAPI(query, displayYoutubeSearch)
 }
 
 $(watchSubmit);
