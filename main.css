@@ -1,0 +1,37 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Raleway', sans-serif;
+}
+
+header {
+    margin: 0 auto;
+}
+
+h1, form {
+    text-align: center;
+}
+
+form button {
+    background-color: lightgrey;
+    border: none;
+    padding: 0.5em 1em;
+    margin: 0;
+    text-align: center;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+form input {
+    font-size: 1em;
+}
+
+.channel-link {
+    display:block;
+}
+
+.js-search-title, .js-search-results {
+    margin: 20px;
+}
