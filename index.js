@@ -31,6 +31,7 @@ function renderResults(result){
 </div>`
 }
 
+//renders the Previous and Next page buttons
 function renderNavButtons(data){
     let nextPageString = '';
     let prevPageString = '';
