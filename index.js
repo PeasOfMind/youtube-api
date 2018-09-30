@@ -51,13 +51,13 @@ function displayYoutubeSearch(data){
     //get the nextPage and previousPage tokens
     let navString = renderNavButtons(data);
     //put it into HTML
-    $('.js-search-results').html(results);
-    $('.js-navigation').html(navString);
+    $('.js-search-results').prop('hidden', false).html(results);
+    $('.js-navigation').prop('hidden', false).html(navString);
 }
 
 function displaySearchTitle(searchString){
     searchTitleString = `<h2>Search Results for: <span>${searchString}</span></h2>`
-    $('.js-search-title').html(searchTitleString);
+    $('.js-search-title').prop('hidden', false).html(searchTitleString);
 }
 
 function watchSubmit(){
