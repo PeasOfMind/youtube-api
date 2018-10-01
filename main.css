@@ -6,6 +6,11 @@ body {
     font-family: 'Raleway', sans-serif;
 }
 
+main {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
 header {
     margin: 0 auto;
 }
@@ -46,3 +51,16 @@ form input {
 .js-search-title, .js-search-results, .js-navigation {
     margin: 20px;
 }
+
+/* .js-search-results {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+/* image at 320 x 180px */
+
+/* .search-result {
+    flex: 1 1 320px;
+    margin: 10px;
+}  */

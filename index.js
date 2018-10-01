@@ -21,10 +21,10 @@ function getDataFromAPI(searchTerm, callback, tokenId){
 
 //puts each result into html string format
 function renderResults(result){
-    return `<div>
+    return `<div class="search-result">
     <h3 class="result-title">${result.snippet.title}</h3>
     <a href="https://www.youtube.com/watch?v=${result.id.videoId}" target="_blank" rel="noopener noreferrer" class="video-link">
-    <img src="${result.snippet.thumbnails.medium.url}">
+    <img src="${result.snippet.thumbnails.medium.url}" alt="${result.snippet.title}">
     </a>
     <a href="https://www.youtube.com/channel/${result.snippet.channelId}" target="_blank" rel="noopener noreferrer" class="channel-link">
     More from ${result.snippet.channelTitle}</a>
