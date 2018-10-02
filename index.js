@@ -19,12 +19,19 @@ function getDataFromAPI(searchTerm, callback, tokenId){
     $.ajax(settings)
 }
 
+//counts the total results and results per page to display in a paragraph
+function renderResultsNum(data){
+    const total = data.pageInfo.totalResults;
+    const resultsShown = data.pageInfo.resultsPerPage;
+    return `<p aria-live="assertive">Found ${total} matches. Displaying ${resultsShown} results.</p>`
+}
+
 //puts each result into html string format
 function renderResults(result){
     return `<div class="search-result">
     <h3 class="result-title">${result.snippet.title}</h3>
-    <button class="trigger" id="${result.id.videoId}">
-    <img src="${result.snippet.thumbnails.medium.url}" alt="${result.snippet.title}"></button>
+    <input type="image" class="trigger" id="${result.id.videoId}" aria-label="Open Video in Lightbox: ${result.snippet.title}"
+    src="${result.snippet.thumbnails.medium.url}" alt="${result.snippet.title}">
     <a href="https://www.youtube.com/channel/${result.snippet.channelId}" target="_blank" rel="noopener noreferrer" class="channel-link">
     More from ${result.snippet.channelTitle}</a>
 </div>`
@@ -34,26 +41,28 @@ function renderResults(result){
 function renderNavButtons(data){
     let nextPageString = '';
     let prevPageString = '';
-    if (data.nextPageToken) nextPageString = `<button class="nav-button" id="${data.nextPageToken}">Next >></button>`
-    if (data.prevPageToken) prevPageString = `<button class="nav-button" id="${data.prevPageToken}"><< Previous</button>`    
+    if (data.nextPageToken) nextPageString = `<button class="nav-button" id="${data.nextPageToken}" aria-label="Next">Next >></button>`
+    if (data.prevPageToken) prevPageString = `<button class="nav-button" id="${data.prevPageToken}" aria-label="Previous"><< Previous</button>`    
     return `${prevPageString} ${nextPageString}`
 };
 
 
 function displayYoutubeSearch(data){
     console.log(data);
+    //get the number of total results and results on page
+    const numResults = renderResultsNum(data);
     //get the  HTML string array containing the results of the search
-    let results = data.items.map(item => renderResults(item));
+    const results = data.items.map(item => renderResults(item)).join("\n");
     //get the nextPage and previousPage tokens
-    let navString = renderNavButtons(data);
+    const navString = renderNavButtons(data);
     //put it into HTML
-    $('.js-search-results').prop('hidden', false).html(results);
+    $('.js-search-results').prop('hidden', false).empty().append(numResults).append(results);
     $('.js-navigation').prop('hidden', false).html(navString);
 }
 
 // shows the search keyword(s) entered
 function displaySearchTitle(searchString){
-    searchTitleString = `<h2>Search Results for: <span>${searchString}</span></h2>`
+    const searchTitleString = `<h2>Search Results for: <span>${searchString}</span></h2>`
     $('.js-search-title').prop('hidden', false).html(searchTitleString);
 }
 
@@ -61,8 +70,8 @@ function displaySearchTitle(searchString){
 function watchSubmit(){
     $('.js-search-form').submit(function(event){
         event.preventDefault();
-        let queryTarget = $(this).find('.js-query');
-        let query = queryTarget.val();
+        const queryTarget = $(this).find('.js-query');
+        const query = queryTarget.val();
         queryTarget.val('');
         getDataFromAPI(query, displayYoutubeSearch);
         displaySearchTitle(query);
@@ -72,8 +81,8 @@ function watchSubmit(){
 //pulls the next or previous page
 function watchNavigation(){
     $('.js-navigation').on('click', 'button', function(event){
-        let idToken = $(this).attr('id');
-        let existingQuery = $('.js-search-title').find('span').text();
+        const idToken = $(this).attr('id');
+        const existingQuery = $('.js-search-title').find('span').text();
         getDataFromAPI(existingQuery, displayYoutubeSearch, idToken);
     });
 }
@@ -92,10 +101,13 @@ function toggleModal(){
 
 function watchModal(){
     $('.js-search-results').on('click', '.trigger', function(event){
+        event.preventDefault();
+        //get video title
+        const videoTitle = $(this).attr('alt');
         //passes the video id into renderEmbedLink
-        let embedLink = renderEmbedLink($(this).attr('id'));
+        const embedLink = renderEmbedLink($(this).attr('id'));
         //insert the embedded link into the modal paragraph 
-        $('.video-player').html(embedLink);
+        $('.video-player').html(embedLink).attr('aria-label',`Opened Video in Lightbox: ${videoTitle}`);
         //make the modal visible
         toggleModal();
     });

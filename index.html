@@ -15,25 +15,22 @@
         <h1>Search Videos on Youtube</h1>
     </header>
     <main role="main">
+        <div class="modal" >
+            <div class="modal-content">
+                <button class="close-button" tab-index="1" aria-label="Close Video Player">&times;</button>
+                <p class="video-player" aria-live="assertive"></p>
+            </div>
+        </div>
         <form action="#" class="js-search-form">
-            <input type="text" class="js-query">
+            <label for="query"></label>
+            <input type="text" class="js-query" id="query">
             <button type="submit">Search Youtube</button>
         </form>
         <div class="js-search-title" aria-live="assertive" hidden>
         </div>
-        <div class="js-search-results" aria-live="assertive" hidden>    
+        <div class="js-search-results" hidden>    
         </div>
-        <div class="js-navigation" aria-live="polite" hidden>
-        </div>
-        <!-- The Modal -->
-        <div class="modal">
-            <!-- Modal content -->
-            <div class="modal-content">
-                <button class="close-button" aria-label="Close Video Player">&times;</button>
-                <p class="video-player"><iframe width="560" height="315" 
-                    src="https://www.youtube.com/embed/7MPlRAlrRZk" frameborder="0" 
-                    allow="autoplay; encrypted-media" allowfullscreen></iframe></p>
-            </div>
+        <div class="js-navigation" hidden>
         </div>
     </main>
     <script src="index.js"></script>

@@ -54,9 +54,9 @@ form input {
     padding: 0;
 }
 
-img:hover {
-    width: 110%;
-}
+/* .trigger:hover {
+    transform: scale(1.1, 1.1);
+} */
 
 .channel-link {
     display:block;
