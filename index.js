@@ -23,9 +23,8 @@ function getDataFromAPI(searchTerm, callback, tokenId){
 function renderResults(result){
     return `<div class="search-result">
     <h3 class="result-title">${result.snippet.title}</h3>
-    <a href="https://www.youtube.com/watch?v=${result.id.videoId}" target="_blank" rel="noopener noreferrer" class="video-link">
-    <img src="${result.snippet.thumbnails.medium.url}" alt="${result.snippet.title}">
-    </a>
+    <button class="trigger" id="${result.id.videoId}">
+    <img src="${result.snippet.thumbnails.medium.url}" alt="${result.snippet.title}"></button>
     <a href="https://www.youtube.com/channel/${result.snippet.channelId}" target="_blank" rel="noopener noreferrer" class="channel-link">
     More from ${result.snippet.channelTitle}</a>
 </div>`
@@ -35,12 +34,9 @@ function renderResults(result){
 function renderNavButtons(data){
     let nextPageString = '';
     let prevPageString = '';
-    if (data.nextPageToken) nextPageString = `<li id="${data.nextPageToken}">Next >></li>`
-    if (data.prevPageToken) prevPageString = `<li id="${data.prevPageToken}"><< Previous</li>`    
-    return `<ul>
-    ${prevPageString}
-    ${nextPageString}
-    </ul>`
+    if (data.nextPageToken) nextPageString = `<button class="nav-button" id="${data.nextPageToken}">Next >></button>`
+    if (data.prevPageToken) prevPageString = `<button class="nav-button" id="${data.prevPageToken}"><< Previous</button>`    
+    return `${prevPageString} ${nextPageString}`
 };
 
 
@@ -55,11 +51,13 @@ function displayYoutubeSearch(data){
     $('.js-navigation').prop('hidden', false).html(navString);
 }
 
+// shows the search keyword(s) entered
 function displaySearchTitle(searchString){
     searchTitleString = `<h2>Search Results for: <span>${searchString}</span></h2>`
     $('.js-search-title').prop('hidden', false).html(searchTitleString);
 }
 
+//gets search results upon submit
 function watchSubmit(){
     $('.js-search-form').submit(function(event){
         event.preventDefault();
@@ -71,14 +69,43 @@ function watchSubmit(){
     });
 }
 
+//pulls the next or previous page
 function watchNavigation(){
-    $('.js-navigation').on('click', 'li', function(event){
+    $('.js-navigation').on('click', 'button', function(event){
         let idToken = $(this).attr('id');
-        console.log(idToken);
         let existingQuery = $('.js-search-title').find('span').text();
         getDataFromAPI(existingQuery, displayYoutubeSearch, idToken);
     });
 }
 
+//makes the html code for the embedded video link using iframe
+function renderEmbedLink(videoCode){
+    return `<iframe width="560" height="315" 
+    src="https://www.youtube.com/embed/${videoCode}" frameborder="0" 
+    allow="autoplay; encrypted-media" allowfullscreen></iframe>`
+}
+
+//makes modal visible or invisible
+function toggleModal(){
+    $('.modal').toggleClass('show-modal');
+}
+
+function watchModal(){
+    $('.js-search-results').on('click', '.trigger', function(event){
+        //passes the video id into renderEmbedLink
+        let embedLink = renderEmbedLink($(this).attr('id'));
+        //insert the embedded link into the modal paragraph 
+        $('.video-player').html(embedLink);
+        //make the modal visible
+        toggleModal();
+    });
+
+    $('.close-button').click(event => {
+        //make the modal hidden
+        toggleModal();
+    });
+}
+
 $(watchSubmit);
 $(watchNavigation);
+$(watchModal);

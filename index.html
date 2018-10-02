@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
     <!-- <link rel="stylesheet" href="default.css"> -->
     <link rel="stylesheet" href="main.css">
     <title>Youtube Search App</title>
@@ -24,6 +24,16 @@
         <div class="js-search-results" aria-live="assertive" hidden>    
         </div>
         <div class="js-navigation" aria-live="polite" hidden>
+        </div>
+        <!-- The Modal -->
+        <div class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <button class="close-button" aria-label="Close Video Player">&times;</button>
+                <p class="video-player"><iframe width="560" height="315" 
+                    src="https://www.youtube.com/embed/7MPlRAlrRZk" frameborder="0" 
+                    allow="autoplay; encrypted-media" allowfullscreen></iframe></p>
+            </div>
         </div>
     </main>
     <script src="index.js"></script>
